@@ -1,9 +1,10 @@
 package luar
 
 import (
+	"bytes"
 	"reflect"
 
-	"github.com/yuin/gopher-lua"
+	lua "github.com/yuin/gopher-lua"
 )
 
 func structIndex(L *lua.LState) int {
@@ -14,6 +15,10 @@ func structIndex(L *lua.LState) int {
 		L.Push(fn)
 		return 1
 	}
+
+	keyBytes := []byte(key)
+	keyBytes[0] = bytes.ToUpper(keyBytes[:1])[0]
+	key = string(keyBytes)
 
 	ref = reflect.Indirect(ref)
 	index := mt.fieldIndex(key)
